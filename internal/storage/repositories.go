@@ -58,3 +58,31 @@ func (s *Store) ListTasks() ([]Task, error) {
 	// return the slice of tasks and nil error
 	return tasks, nil
 }
+
+/**
+ * Creates a new task with the given title in the database.
+ *
+ * It returns the created Task struct
+ * and an error if any occurs during the database operation.
+ */
+func (s *Store) CreateTask(title string) (Task, error) {
+
+	// insert a new task with the given title
+	result, err := s.db.Exec("INSERT INTO tasks (title) VALUES (?)", title)
+
+	// error in inserting task: return the error
+	if err != nil {
+		return Task{}, err
+	}
+
+	// get the ID of the newly inserted task
+	id, err := result.LastInsertId()
+
+	// error in getting last insert ID: return the error
+	if err != nil {
+		return Task{}, err
+	}
+
+	// return the created task with the new ID, title, and status (false)
+	return Task{Id: id, Title: title, Completed: false}, nil
+}
