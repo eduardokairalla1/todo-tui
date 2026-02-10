@@ -136,3 +136,34 @@ func handleDeleteKey(m Model) (Model, tea.Cmd) {
 	// return the updated model and no command
 	return m, nil
 }
+
+/**
+ * Handles the toggle key input to toggle the completion status
+ * of the selected task.
+ *
+ * It takes the current model as input, toggles the completion status of the
+ * selected task in the database and updates the task list, and returns the
+ * updated model with no command.
+ */
+func handleToggleKey(m Model) (Model, tea.Cmd) {
+
+	// no tasks: nothing to toggle, return the current model
+	if len(m.Tasks) == 0 {
+		return m, nil
+	}
+
+	// get the selected task, toggle its completion status, and update it in
+	// the database
+	t := &m.Tasks[m.Cursor]
+	t.Completed = !t.Completed
+	err := m.Store.UpdateTask(t.Id, t.Completed)
+
+	// error in updating task: log error and revert the completion status
+	if err != nil {
+		log.Printf("Error while updating task: %v", err)
+		t.Completed = !t.Completed
+	}
+
+	// return the updated model and no command
+	return m, nil
+}
