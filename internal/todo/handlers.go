@@ -167,3 +167,37 @@ func handleToggleKey(m Model) (Model, tea.Cmd) {
 	// return the updated model and no command
 	return m, nil
 }
+
+/**
+ * Handles the cursor up key input to move the cursor up the task list.
+ *
+ * It takes the current model as input, moves the cursor up if possible,
+ * and returns the updated model with no command.
+ */
+func handleCursorUp(m Model) (Model, tea.Cmd) {
+
+	// cursor is not at the top of the list: move it up
+	if m.Cursor > 0 {
+		m.Cursor--
+	}
+
+	// return the updated model and no command
+	return m, nil
+}
+
+/**
+ * Handles the cursor down key input to move the cursor down the task list.
+ *
+ * It takes the current model as input, moves the cursor down if possible,
+ * and returns the updated model with no command.
+ */
+func handleCursorDown(m Model) (Model, tea.Cmd) {
+
+	// cursor is not at the bottom of the list: move it down
+	if m.Cursor < len(m.Tasks)-1 {
+		m.Cursor++
+	}
+
+	// return the updated model and no command
+	return m, nil
+}
