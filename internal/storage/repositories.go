@@ -86,3 +86,18 @@ func (s *Store) CreateTask(title string) (Task, error) {
 	// return the created task with the new ID, title, and status (false)
 	return Task{Id: id, Title: title, Completed: false}, nil
 }
+
+/**
+ * Deletes a task from the database by its ID.
+ *
+ * It takes the task ID as a parameter and returns an error
+ * if any occurs during the database operation.
+ */
+func (s *Store) DeleteTask(id int64) error {
+
+	// delete the task with the given ID
+	_, err := s.db.Exec("DELETE FROM tasks WHERE id = ?", id)
+
+	// return error if any occurs during the delete operation
+	return err
+}
