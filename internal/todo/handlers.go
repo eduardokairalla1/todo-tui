@@ -101,3 +101,38 @@ func handleAddingInput(m Model, msg tea.KeyMsg) (Model, tea.Cmd) {
 	// return the updated model and no command
 	return m, nil
 }
+
+/**
+ * Handles the delete key input to delete the selected task.
+ *
+ * It takes the current model as input, deletes the selected task from the
+ * database and the task list, and returns the updated model with no command.
+ */
+func handleDeleteKey(m Model) (Model, tea.Cmd) {
+
+	// no tasks: nothing to delete, return the current model
+	if len(m.Tasks) == 0 {
+		return m, nil
+	}
+
+	// get the index of the selected task and delete it from the database
+	i := m.Cursor
+	err := m.Store.DeleteTask(m.Tasks[i].Id)
+
+	// error in deleting task: log error and do not update the task list
+	if err != nil {
+		log.Printf("Error while deleting task: %v", err)
+		return m, nil
+	}
+
+	// no error: remove the task from the task list and adjust the cursor
+	m.Tasks = append(m.Tasks[:i], m.Tasks[i+1:]...)
+
+	// cursor is now out of bounds: move it up
+	if m.Cursor >= len(m.Tasks) && m.Cursor > 0 {
+		m.Cursor--
+	}
+
+	// return the updated model and no command
+	return m, nil
+}
