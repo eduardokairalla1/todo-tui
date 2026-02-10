@@ -88,6 +88,29 @@ func (s *Store) CreateTask(title string) (Task, error) {
 }
 
 /**
+ * Updates the completion status of a task in the database.
+ *
+ * It takes the task ID and the new completion status as parameters.
+ * It returns an error if any occurs during the database operation.
+ */
+func (s *Store) UpdateTask(id int64, completed bool) error {
+
+	// convert the boolean 'completed' to an integer (0 or 1) for storage
+	completedInt := 0
+
+	// if the task is completed, set completedInt to 1
+	if completed {
+		completedInt = 1
+	}
+
+	// update the 'completed' status of the task with the given ID
+	_, err := s.db.Exec("UPDATE tasks SET completed = ? WHERE id = ?", completedInt, id)
+
+	// return error if any occurs during the update operation
+	return err
+}
+
+/**
  * Deletes a task from the database by its ID.
  *
  * It takes the task ID as a parameter and returns an error
