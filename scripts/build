@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# create build directory
+mkdir -p ./build
+
+# build the application
+go build -o ./build/todo-tui ./cmd/main.go
+
+# print success message
+echo "--- Build completed successfully ---"
